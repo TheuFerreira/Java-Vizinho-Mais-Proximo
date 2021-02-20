@@ -7,22 +7,11 @@ import java.util.*;
 public class Main {
 
     public static void main(String[] args) {
-	    // write your code here
+        int[][] matrix = readFile();
 
-        int[][] path = readFile();
-
-        for (int[] i : path) {
-            for (int j : i) {
-                System.out.print(j + " ");
-            }
-            System.out.println();
-        }
-
-        List<Integer> minPath = nearestNeighbor(path);
-        for (Integer i : minPath) {
-            System.out.print(i + " ");
-        }
-        System.out.println();
+        List<Integer> minPath = nearestNeighbor(matrix);
+        int distance = distance(matrix, minPath);
+        System.out.println(distance);
     }
 
     private static int[][] readFile() {
@@ -48,7 +37,6 @@ public class Main {
         return matrix;
     }
 
-    // Vizinho mais próximo
     private static List<Integer> nearestNeighbor(int[][] matrix) {
         List<Integer> path = new ArrayList<>();
         path.add(0);
@@ -78,5 +66,17 @@ public class Main {
 
         path.add(0);
         return path;
+    }
+
+    public static int distance(int[][] matrix, List<Integer> path) {
+        int value = 0;
+        for (int i = 0; i < path.size() - 1; i++) {
+            int row = path.get(i);
+            int nextRow = path.get(i + 1);
+
+            value += matrix[row][nextRow];
+        }
+
+        return value;
     }
 }
