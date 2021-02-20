@@ -9,7 +9,13 @@ public class Main {
         int[][] matrix = readFile();
 
         List<Integer> minPath = nearestNeighbor(matrix);
+        showPath(minPath);
         int distance = distance(matrix, minPath);
+        System.out.println(distance);
+
+        List<Integer> answer = localSearch(matrix);
+        showPath(answer);
+        distance = distance(matrix, answer);
         System.out.println(distance);
     }
 
@@ -67,7 +73,13 @@ public class Main {
         return path;
     }
 
-    public static int distance(int[][] matrix, List<Integer> path) {
+    private static void showPath(List<Integer> path) {
+        for (Integer i : path)
+            System.out.print(i + " ");
+        System.out.println();
+    }
+
+    private static int distance(int[][] matrix, List<Integer> path) {
         int value = 0;
         for (int i = 0; i < path.size() - 1; i++) {
             int row = path.get(i);
@@ -77,5 +89,33 @@ public class Main {
         }
 
         return value;
+    }
+
+    private static List<Integer> localSearch(int[][] matrix) {
+        List<Integer> minPath = nearestNeighbor(matrix);
+        minPath.remove(0);
+        minPath.remove(minPath.size() - 1);
+
+        int i = 0;
+        while (i < 100) {
+            minPath = switchValues(minPath, matrix.length - 2);
+            i++;
+        }
+
+        minPath.add(0, 0);
+        minPath.add(0);
+        return minPath;
+    }
+
+    private static List<Integer> switchValues(List<Integer> path, int size) {
+        Random random = new Random();
+        int index = random.nextInt(size);
+        int secondIndex = random.nextInt(size);
+        int temp = path.get(index);
+
+        path.set(index, path.get(secondIndex));
+        path.set(secondIndex, temp);
+
+        return path;
     }
 }
