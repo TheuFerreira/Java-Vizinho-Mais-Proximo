@@ -93,17 +93,22 @@ public class Main {
 
     private static List<Integer> localSearch(int[][] matrix) {
         List<Integer> minPath = nearestNeighbor(matrix);
-        minPath.remove(0);
-        minPath.remove(minPath.size() - 1);
 
-        int i = 0;
-        while (i < 100) {
+        int distanceMinPath = distance(matrix, minPath);
+        int distanceNewPath = 1000;
+
+        while (distanceMinPath < distanceNewPath) {
+            minPath.remove(0);
+            minPath.remove(minPath.size() - 1);
+
             minPath = switchValues(minPath, matrix.length - 2);
-            i++;
+
+            minPath.add(0, 0);
+            minPath.add(0);
+
+            distanceNewPath = distance(matrix, minPath);
         }
 
-        minPath.add(0, 0);
-        minPath.add(0);
         return minPath;
     }
 
