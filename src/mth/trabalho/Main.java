@@ -116,6 +116,12 @@ public class Main {
         Random random = new Random();
         int index = random.nextInt(size);
         int secondIndex = random.nextInt(size);
+
+        while (index == secondIndex){
+            index = random.nextInt(size);
+            secondIndex = random.nextInt(size);
+        }
+
         int temp = path.get(index);
 
         path.set(index, path.get(secondIndex));
