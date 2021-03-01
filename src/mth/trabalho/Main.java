@@ -6,23 +6,39 @@ import java.util.*;
 public class Main {
 
     public static void main(String[] args) {
+        long ti = System.currentTimeMillis();
         int[][] matrix = readFile();
 
         List<Integer> minPath = nearestNeighbor(matrix);
+        System.out.println("Solução vizinho mais próximo\n");
         showPath(minPath);
+        System.out.println("\n");
         int distance = distance(matrix, minPath);
-        System.out.println(distance);
+        System.out.println("A distância total é: " + distance);
 
         List<Integer> answer = localSearch(matrix);
+        System.out.println("Solução final busca local\n");
         showPath(answer);
+        System.out.println("\n");
         distance = distance(matrix, answer);
-        System.out.println(distance);
+        System.out.println("A distância total é: " + distance);
+
+        List<Integer>list = localSearch(answer, matrix);
+        if (list!=null)
+        {
+            showPath(list);
+            System.out.println("\n");
+            distance = distance(matrix, list);
+
+            System.out.println("A distância total é: " + distance);
+        }
+        System.out.println("O tempo de execução foi de: "+(System.currentTimeMillis()-ti)+" milisegundos");
     }
 
     private static int[][] readFile() {
         int[][] matrix = new int[0][0];
         try {
-            File file = new File("paulo_bebedor.txt");
+            File file = new File("INST3.txt");
             Scanner scanner = new Scanner(file);
 
             int size = Integer.parseInt(scanner.nextLine());
@@ -96,8 +112,11 @@ public class Main {
 
         int distanceMinPath = distance(matrix, minPath);
         int distanceNewPath = 1000;
+        int cont=0;
 
-        while (distanceMinPath < distanceNewPath) {
+        System.out.println("Tentativas de otimização utilizando busca local\n");
+
+        while ((cont < 1000000) || (distanceMinPath <= distanceNewPath)) {
             minPath.remove(0);
             minPath.remove(minPath.size() - 1);
 
@@ -107,10 +126,60 @@ public class Main {
             minPath.add(0);
 
             distanceNewPath = distance(matrix, minPath);
+            //showPath(minPath);
+            cont++;
         }
 
         return minPath;
     }
+
+
+
+
+
+
+
+
+
+
+    private static List<Integer> localSearch(List<Integer> minPath, int [][] matrix) {
+
+
+        int distanceMinPath = distance(matrix, minPath);
+        int distanceNewPath = 1000;
+        int cont=0;
+
+        System.out.println("Tentativas de otimização utilizando busca local\n");
+
+        while ((cont < 1000) ) {
+            minPath.remove(0);
+            minPath.remove(minPath.size() - 1);
+
+            minPath = switchValues(minPath, matrix.length - 2);
+
+            minPath.add(0, 0);
+            minPath.add(0);
+
+            distanceNewPath = distance(matrix, minPath);
+            //showPath(minPath);
+            cont++;
+            if (distanceMinPath > distanceNewPath)
+            {
+                break;
+            }
+        }
+
+
+        return (distanceMinPath <= distanceNewPath)? minPath:null;
+    }
+
+
+
+
+
+
+
+
 
     private static List<Integer> switchValues(List<Integer> path, int size) {
         Random random = new Random();
@@ -126,6 +195,7 @@ public class Main {
 
         path.set(index, path.get(secondIndex));
         path.set(secondIndex, temp);
+
 
         return path;
     }
