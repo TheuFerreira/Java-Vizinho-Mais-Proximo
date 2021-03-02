@@ -23,22 +23,13 @@ public class Main {
         distance = distance(matrix, answer);
         System.out.println("A distância total é: " + distance);
 
-        List<Integer>list = localSearch(answer, matrix);
-        if (list!=null)
-        {
-            showPath(list);
-            System.out.println("\n");
-            distance = distance(matrix, list);
-
-            System.out.println("A distância total é: " + distance);
-        }
         System.out.println("O tempo de execução foi de: "+(System.currentTimeMillis()-ti)+" milisegundos");
     }
 
     private static int[][] readFile() {
         int[][] matrix = new int[0][0];
         try {
-            File file = new File("INST3.txt");
+            File file = new File("INST4.txt");
             Scanner scanner = new Scanner(file);
 
             int size = Integer.parseInt(scanner.nextLine());
